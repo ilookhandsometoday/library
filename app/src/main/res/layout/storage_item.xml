@@ -7,8 +7,8 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="334dp"
-        android:layout_height="40dp"
+        android:layout_width="335dp"
+        android:layout_height="63dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,6 +27,12 @@
             android:layout_width="324dp"
             android:layout_height="wrap_content"
             android:text="bookAuthor" />
+
+        <TextView
+            android:id="@+id/book_rating"
+            android:layout_width="324dp"
+            android:layout_height="wrap_content"
+            android:text="bookRating" />
 
     </LinearLayout>
 
