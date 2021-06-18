@@ -23,7 +23,7 @@ public class Repository {
 
     public Repository(Context context) {
         DatabaseManager databaseManager = DatabaseManager.getInstance(context);
-        dao = databaseManager.getHseDao();
+        dao = databaseManager.getLibDao();
     }
 
     /*
