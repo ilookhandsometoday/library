@@ -5,7 +5,7 @@ public class StorageItem {
     private Integer book_id;
     private String book_name;
     private String book_author;
-    private Integer book_rating;
+    private Double book_rating;
     private Integer rack_number;
     private Integer shelf_number;
 
@@ -18,7 +18,7 @@ public class StorageItem {
         book_author = s;
     }
 
-    public void setRating(Integer i){ book_rating = i; }
+    public void setRating(Double i){ book_rating = i; }
 
     public void setRack(Integer i){ rack_number = i; }
 
@@ -38,7 +38,7 @@ public class StorageItem {
 
     public Integer getRack(Integer i){ return rack_number; }
 
-    public Integer getRating(Integer i){ return book_rating; }
+    public Double getRating(Double i){ return book_rating; }
 
     public Integer getShelf(Integer i){ return shelf_number; }
 }
