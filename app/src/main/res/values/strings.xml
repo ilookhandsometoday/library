@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">library</string>
+    <string name="SA_name">Хранилище книг</string>
+    <string name="SA_label1">Выберите номер стеллажа</string>
+    <string name="SA_label2">Выберите номер полки</string>
+    <string name="SA_imagedesc">replace book</string>
 </resources>
