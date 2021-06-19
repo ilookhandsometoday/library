@@ -34,10 +34,12 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation "androidx.lifecycle:lifecycle-extensions:2.1.0"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     implementation 'org.jetbrains:annotations:15.0'
     testImplementation 'junit:junit:4.*'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'androidx.room:room-runtime:2.3.0'
     annotationProcessor 'androidx.room:room-compiler:2.3.0'
+    implementation "androidx.room:room-rxjava2:2.3.0"
 }

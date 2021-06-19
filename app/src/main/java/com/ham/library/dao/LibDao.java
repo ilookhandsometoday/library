@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
@@ -17,6 +18,8 @@ import com.ham.library.dao.entity.ReviewEntity;
 import java.util.Date;
 import java.util.List;
 
+import io.reactivex.Completable;
+
 @Dao
 public interface LibDao {
     /*
@@ -28,10 +31,10 @@ public interface LibDao {
     LiveData<List<BookEntity>> getAllBooksByID(Integer id);
     @Query("SELECT * FROM `book` order by rating")
     LiveData<List<BookEntity>> getAllBooksOrderByRating();
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBooks(List<BookEntity> data);
-    @Insert
-    void insertBook(BookEntity data);
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Completable insertBook(BookEntity data);
     @Update
     void updateBook(BookEntity data);
     @Delete
@@ -63,17 +66,20 @@ public interface LibDao {
     Review queries
     */
     @Transaction
+    @Query("SELECT * FROM `review` WHERE book_id = :book_id ORDER BY timestamp")
+    LiveData<List<ReviewEntity>> getBookReviews(Integer book_id);
+    @Transaction
     @Query("SELECT * FROM `review` WHERE book_id = :book_id ORDER BY timestamp DESC LIMIT 1")
     LiveData<List<ReviewEntity>> getLastReview(Integer book_id);
     @Transaction
-    @Query("SELECT * FROM `review` WHERE book_id = :book_id AND timestamp BETWEEN :start_time AND :end_time")
-    LiveData<List<ReviewEntity>> getReviewsBetweenDates(Integer book_id, Date start_time, Date end_time);
+    @Query("SELECT * FROM `review` WHERE timestamp BETWEEN :start_time AND :end_time")
+    LiveData<List<ReviewEntity>> getReviewsBetweenDates(Date start_time, Date end_time);
     @Transaction
-    @Query("SELECT * FROM `review` WHERE book_id = :book_id AND rating = :rating")
-    LiveData<List<ReviewEntity>> getReviewsByRating(Integer book_id, Integer rating);
+    @Query("SELECT * FROM `review` WHERE rating = :rating")
+    LiveData<List<ReviewEntity>> getReviewsByRating(Integer rating);
     @Transaction
-    @Query("SELECT * FROM `review` WHERE book_id = :book_id AND rating = :rating AND timestamp BETWEEN :start_time AND :end_time")
-    LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer book_id, Integer rating, Date start_time, Date end_time);
+    @Query("SELECT * FROM `review` WHERE rating = :rating AND timestamp BETWEEN :start_time AND :end_time")
+    LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer rating, Date start_time, Date end_time);
     @Transaction
     @Insert
     void insertReviews(List<Review> data);

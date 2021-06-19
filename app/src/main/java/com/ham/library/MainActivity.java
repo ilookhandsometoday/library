@@ -1,15 +1,15 @@
 package com.ham.library;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.ham.library.dao.DatabaseManager;
 import com.ham.library.dao.LibraryViewModel;
 import com.ham.library.dao.entity.BookEntity;
 import com.ham.library.dao.model.Book;
@@ -17,10 +17,13 @@ import com.ham.library.dao.model.Book;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class MainActivity extends AppCompatActivity {
     private Spinner spinner;
     ArrayAdapter<Book> adapter;
     protected LibraryViewModel libraryViewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,18 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.groupList);
 
         List<Book> groups = new ArrayList<>();
+        BookEntity kk = new BookEntity();
+        kk.author = "Григорович Сергей";
+        kk.rating = (double)9;
+        kk.title = "Вот ты говоришь, а я ВИЖУ";
+        kk.id = 2;
+        libraryViewModel.insertBook(kk);
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         initGroupList(groups);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

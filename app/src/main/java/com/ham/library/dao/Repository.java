@@ -59,10 +59,11 @@ public class Repository {
     /*
         Review queries
     */
+    public LiveData<List<ReviewEntity>> getBookReviews(Integer bookID) { return dao.getBookReviews(bookID); }
     public LiveData<List<ReviewEntity>> getLastReview(Integer bookID) { return dao.getLastReview(bookID); }
-    public LiveData<List<ReviewEntity>> getReviewsBetweenDates(Integer bookID, Date start_time, Date end_time) { return dao.getReviewsBetweenDates(bookID, start_time, end_time); }
-    public LiveData<List<ReviewEntity>> getReviewsByRating(Integer bookID, Integer rating) { return dao.getReviewsByRating(bookID, rating); }
-    public LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer bookID, Integer rating, Date start_time, Date end_time) { return dao.getReviewsByRatingAndDate(bookID, rating, start_time, end_time); }
+    public LiveData<List<ReviewEntity>> getReviewsBetweenDates(Date start_time, Date end_time) { return dao.getReviewsBetweenDates(start_time, end_time); }
+    public LiveData<List<ReviewEntity>> getReviewsByRating(Integer rating) { return dao.getReviewsByRating(rating); }
+    public LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer rating, Date start_time, Date end_time) { return dao.getReviewsByRatingAndDate(rating, start_time, end_time); }
     public void insertReview(Review data) {
         dao.insertReview(data);
     }
