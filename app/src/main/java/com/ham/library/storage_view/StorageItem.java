@@ -8,7 +8,7 @@ public class StorageItem {
     private Double book_rating;
     private Integer rack_number;
     private Integer shelf_number;
-
+    private Integer place_id;
 
     public void setId(Integer i){ book_id = i; }
 
@@ -20,9 +20,11 @@ public class StorageItem {
 
     public void setRating(Double i){ book_rating = i; }
 
-    public void setRack(Integer i){ rack_number = i; }
+    public void setRack(Integer i){rack_number = i; }
 
-    public void setShelf(Integer i){ shelf_number = i; }
+    public void setShelf(Integer i){shelf_number = i; }
+
+    public void setPlace(Integer i){place_id = i; }
 
     public Integer getId(){
         return book_id;
@@ -36,9 +38,17 @@ public class StorageItem {
         return book_author;
     }
 
-    public Integer getRack(Integer i){ return rack_number; }
+    public Double getRating(){ return book_rating; }
 
-    public Double getRating(Double i){ return book_rating; }
+    public Integer getRack(){
+        return rack_number;
+    }
 
-    public Integer getShelf(Integer i){ return shelf_number; }
+    public Integer getShelf(){
+        return shelf_number;
+    }
+
+    public Integer getPlace(){
+        return place_id;
+    }
 }

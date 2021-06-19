@@ -4,4 +4,15 @@
     <string name="SA_label1">Выберите номер стеллажа</string>
     <string name="SA_label2">Выберите номер полки</string>
     <string name="SA_imagedesc">replace book</string>
+    <string name="SA_nobooks">Нет книг</string>
+    <string name="SA_nobooks_rack_1">В стеллаже </string>
+    <string name="SA_nobooks_rack_2"> нет книг</string>
+    <string name="SA_dialog_name_1">Перемещение книги «</string>
+    <string name="SA_dialog_name_2">»</string>
+    <string name="SA_dialog_subm">Подтвердить</string>
+    <string name="SA_dialog_canc">Отменить</string>
+    <string name="SA_dialog_truemes_1">Книга «</string>
+    <string name="SA_dialog_truemes_2">» перемещена</string>
+    <string name="SA_dialog_falsemes_1">Книга «</string>
+    <string name="SA_dialog_falsemes_2">» осталась на месте</string>
 </resources>
