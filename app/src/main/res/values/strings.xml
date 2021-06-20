@@ -5,4 +5,5 @@
     <string name="main_menu_storage_button">Места хранения</string>
     <string name="main_menu_compilation_button">Подборки</string>
     <string name="books_activity_title">Книги в вашей библиотеке</string>
+    <string name="books_activity_add_button">Добавить книгу</string>
 </resources>
