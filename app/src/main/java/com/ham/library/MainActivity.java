@@ -28,13 +28,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         libraryViewModel = ViewModelProviders.of(this).get(LibraryViewModel.class);
 
-        spinner = findViewById(R.id.groupList);
+        //spinner = findViewById(R.id.groupList);
 
         List<Book> groups = new ArrayList<>();
         initGroupList(groups);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, groups);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        //spinner.setAdapter(adapter);
     }
 
     private void initGroupList(List<Book> groups) {
