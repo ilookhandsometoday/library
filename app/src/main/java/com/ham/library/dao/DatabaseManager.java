@@ -8,10 +8,14 @@ import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.ham.library.dao.entity.BookEntity;
+import com.ham.library.dao.entity.Review;
+import com.ham.library.dao.entity.ReviewEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import static com.ham.library.dao.utils.Converters.dateFromString;
 
 public class DatabaseManager {
     private DatabaseHelper db;
@@ -52,8 +56,17 @@ public class DatabaseManager {
         book.rating = (double)10;
         book.title = "Вот ты говоришь, а я ВИЖУ";
         book.id = 1;
-
         books.add(book);
         DatabaseManager.getInstance(context).getLibDao().insertBooks(books);
+
+        List<Review> reviews = new ArrayList<>();
+        Review review = new Review();
+        review.id = 1;
+        review.bookID = 1;
+        review.text = "Ваще зашибос!";
+        review.rating = 5;
+        review.timestamp = dateFromString("2021-06-20 21:00");
+        reviews.add(review);
+        DatabaseManager.getInstance(context).getLibDao().insertReviews(reviews);
     }
 }
