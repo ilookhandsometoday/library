@@ -1,6 +1,8 @@
 package com.ham.library.storage_view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -23,6 +26,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ham.library.BaseActivity;
 import com.ham.library.R;
 import com.ham.library.dao.LibraryViewModel;
@@ -33,6 +38,7 @@ import com.shawnlin.numberpicker.NumberPicker;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,8 +51,6 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
     private static Integer selectedRack = 1;
     private static Integer selectedShelf = 1;
     private static FragmentManager manager;
-
-    private Boolean isRackEmpty = false;
 
     private ProgressBar pb;
     private Button addBookBtn;
@@ -71,6 +75,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage);
+        loadData();
 
         rackNum = findViewById(R.id.rackNum);
         rackNum.setFadingEdgeEnabled(true);// Set fading edge enabled
@@ -116,18 +121,17 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
         minusShelf = findViewById(R.id.shelfMinusBtn);
         minusShelf.setOnClickListener(a -> onShelfMinusClick());
 
-        createNewShelves();
         setNumberPickers();
         initData();
     }
 
     private void createNewShelves(){
         shelves= new ArrayList<>();
-
         for(int i = 1; i<5; i++) {
             Integer[] mas = {i, 3};
             shelves.add(mas);
         }
+        saveData();
     }
 
     private void initData(){
@@ -162,6 +166,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
             t.show();
         }
         setNumberPickers();
+        saveData();
         initData();
     }
 
@@ -174,15 +179,16 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
             t.show();
             return;
         }
-        Integer rack = getMaxRack();
-        Integer maxshelf = getMaxShelfByRack(rack);
-        List<Place> placeIds = new ArrayList<>();
+        int rack = getMaxRack();
+        int maxshelf = getMaxShelfByRack(rack);
+        final Place[] p = {new Place()};
         for (Integer[] it:shelves) {
             if(it[0] == rack)
-                mainViewModel.getPlacesByBookcaseAndShelf(rack, it[1]).observe(this, bookEntities -> {
+                for(int i = 1; i<maxshelf+1; i++)
+                mainViewModel.getPlacesByBookcaseAndShelf(rack, i).observe(this, bookEntities -> {
                 if(bookEntities.size() > 0)
                     for (PlaceEntity pl:bookEntities) {
-                        placeIds.add(pl.placeEntity);
+                        p[0] = pl.placeEntity;
                     }
                 });
         }
@@ -192,21 +198,17 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
                 pb.setVisibility(ProgressBar.VISIBLE);
             }
             public void onFinish() {
-                if(placeIds.size() > 0){
-                    for (Place it:placeIds)
+                if(p.length > 0){
+                    for (Place it:p)
                         Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(it));
                 }
                 new CountDownTimer(500, 1000) {
                     public void onTick(long millisUntilFinished) {
                         //
                     }
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     public void onFinish() {
-                        for (Iterator<Integer[]> iterator = shelves.iterator(); iterator.hasNext(); ) {
-                            Integer[] value = iterator.next();
-                            if (value[0] == rack && value[1] == maxshelf) {
-                                iterator.remove();
-                            }
-                        }
+                        shelves.removeIf(value -> value[0] == rack && value[1] == maxshelf);
                         startTimer();
                         if(getMaxRack() < selectedRack) {
                             selectedRack=getMaxRack();
@@ -217,6 +219,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
                                 Toast.LENGTH_LONG);
                         allToasts.add(t);
                         t.show();
+                        saveData();
                         initData();
                     }
                 }.start();
@@ -267,6 +270,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
                                 Toast.LENGTH_LONG);
                         allToasts.add(t);
                         t.show();
+                        saveData();
                         initData();
                     }
                 }.start();
@@ -603,5 +607,36 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
     /////////////////////////////////////
     interface  OnItemClick{
         void onClick(StorageItem data);
+    }
+
+
+    /////////////////////////////////////////////
+    private void saveData() {
+        if(sharedPreferences.contains("shelves"))
+            removeValue("shelves");
+        SharedPreferences.Editor editor = sharedPreferences.edit(); // creating a variable for editor to store data in shared preferences.
+        Gson gson = new Gson(); // creating a new variable for gson.
+        String json = gson.toJson(shelves); // getting data from gson and storing it in a string.
+        editor.putString("shelves", json); // below line is to save data in shared prefs in the form of string.
+        editor.apply(); // below line is to apply changes and save data in shared prefs.
+
+        // after saving data we are displaying a toast message.
+        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
+    }
+
+    private  void removeValue(String key) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(key);
+        editor.apply();
+    }
+
+    private void loadData() {
+        Gson gson = new Gson();// creating a variable for gson.
+        String json = sharedPreferences.getString("shelves", null); // below line is to get to string present from our shared prefs if not present setting it as null.
+        Type type = new TypeToken<List<Integer[]>>() {}.getType();// below line is to get the type of our array list.
+        shelves = gson.fromJson(json, type); // in below line we are getting data from gson and saving it to our array list
+        if (shelves == null) { // checking below if the array list is empty or not
+            createNewShelves();
+        }
     }
 }

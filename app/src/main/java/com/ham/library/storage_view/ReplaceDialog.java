@@ -35,8 +35,6 @@ public class ReplaceDialog extends DialogFragment {
 
     private Boolean isChanged = false;
 
-
-
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

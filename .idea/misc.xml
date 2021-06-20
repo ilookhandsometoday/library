@@ -4,13 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/activity_storage.xml" value="0.6" />
+        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/activity_storage.xml" value="0.264" />
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/add_book_dialog.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/book_item_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/loading.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/my_edit_text_border.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/nostorage_item.xml" value="0.24365942028985507" />
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/replace_dialog.xml" value="0.264" />
         <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/spinner_ring.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/storage_item.xml" value="0.4" />
+        <entry key="..\:/Users/alexm/Desktop/HSE/MobileDev/library/app/src/main/res/layout/storage_item.xml" value="0.264" />
       </map>
     </option>
   </component>
