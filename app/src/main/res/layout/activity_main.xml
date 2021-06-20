@@ -1,17 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    android:weightSum="100">
 
-    <Spinner
-        android:id="@+id/groupList"
-        android:layout_width="160dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="17dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/main_menu_title"
+        style="@style/Theme.Library.BigLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_menu_title"
+        android:gravity="center"
+        android:layout_weight="1"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Button
+        android:id="@+id/books_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_books_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
+
+    <Button
+        android:id="@+id/storage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_storage_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
+
+    <Button
+        android:id="@+id/compilation_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_compilation_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
+</LinearLayout>
