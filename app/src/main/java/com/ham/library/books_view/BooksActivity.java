@@ -1,6 +1,5 @@
 package com.ham.library.books_view;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,13 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,7 +23,6 @@ import com.ham.library.dao.model.Book;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,6 +150,15 @@ public class BooksActivity extends BaseActivity {
             ViewHolder vh = (ViewHolder)v.getTag();
             int position = vh.getAdapterPosition();
             Book book = this.dataList.get(position);
+            Context ctx = v.getContext();
+            Intent intent = new Intent(ctx, BookInfoActivity.class);
+            intent.putExtra("id", book.getId());
+            intent.putExtra("author", book.getAuthor());
+            intent.putExtra("title", book.getTitle());
+            intent.putExtra("rating", book.getRating());
+            ctx.startActivity(intent);
+
         }
     }
+
 }

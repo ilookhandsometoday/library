@@ -25,7 +25,6 @@ public class InsertBookActivity extends BaseActivity {
     protected void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_insert_book);
-
         this.author = findViewById(R.id.author);
         this.author.addTextChangedListener(new TextWatcher() {
             @Override

@@ -23,6 +23,9 @@
         <activity android:name=".books_view.InsertBookActivity">
 
         </activity>
+        <activity android:name=".books_view.BookInfoActivity">
+
+        </activity>
     </application>
 
 </manifest>
