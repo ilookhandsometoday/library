@@ -4,4 +4,5 @@
     <string name="main_menu_books_button">Книги</string>
     <string name="main_menu_storage_button">Места хранения</string>
     <string name="main_menu_compilation_button">Подборки</string>
+    <string name="books_activity_title">Книги в вашей библиотеке</string>
 </resources>
