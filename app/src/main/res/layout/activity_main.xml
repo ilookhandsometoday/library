@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:weightSum="100">
 
     <TextView
         android:id="@+id/main_menu_title"
@@ -12,5 +13,33 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/main_menu_title"
-        android:textAlignment="center" />
+        android:gravity="center"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/books_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_books_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
+
+    <Button
+        android:id="@+id/storage_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_storage_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
+
+    <Button
+        android:id="@+id/compilation_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="33"
+        android:text="@string/main_menu_compilation_button"
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"/>
 </LinearLayout>
