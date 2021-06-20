@@ -19,6 +19,6 @@
             android:layout_width="381dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="noItemsTW" />
+            android:text="@string/SA_nobooks" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

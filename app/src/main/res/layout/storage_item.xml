@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="335dp"
+        android:layout_width="325dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:orientation="vertical"
@@ -20,21 +20,25 @@
 
         <TextView
             android:id="@+id/book_name"
+            style="@style/Theme.Library.Label"
             android:layout_width="324dp"
             android:layout_height="wrap_content"
             android:text="bookName" />
 
         <TextView
             android:id="@+id/book_author"
+            style="@style/Theme.Library.Label"
             android:layout_width="324dp"
             android:layout_height="wrap_content"
             android:text="bookAuthor" />
 
         <TextView
             android:id="@+id/book_rating"
+            style="@style/Theme.Library.RatingLabel"
             android:layout_width="324dp"
             android:layout_height="wrap_content"
             android:text="bookRating" />
+
 
     </LinearLayout>
 
@@ -53,6 +57,7 @@
         app:layout_constraintStart_toEndOf="@+id/linearLayout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.521"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:layout_marginEnd="10dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
