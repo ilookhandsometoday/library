@@ -3,10 +3,9 @@ package com.ham.library.dao.entity;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "book", indices = {@Index(value = {"title"}, unique = true)})
+@Entity(tableName = "book")
 public class BookEntity {
     @PrimaryKey
     public Integer id;
