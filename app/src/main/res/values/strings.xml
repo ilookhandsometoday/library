@@ -29,4 +29,9 @@
     <string name="main_menu_books_button">Книги</string>
     <string name="main_menu_storage_button">Места хранения</string>
     <string name="main_menu_compilation_button">Подборки</string>
+    <string name="choose_rating_lable">Рейтинг:</string>
+    <string name="create_review_lable">Отзыв:</string>
+    <string name="add_review_button">Добавить</string>
+    <string name="compilation_date_label">Подборка за:</string>
+    <string name="compilation_rating_label">С рейтингом не меньше:</string>
 </resources>

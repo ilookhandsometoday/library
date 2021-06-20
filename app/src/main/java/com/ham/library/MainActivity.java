@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
         compilation_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, Compilations.class);
+                startActivity(intent);
             }
         });
     }
