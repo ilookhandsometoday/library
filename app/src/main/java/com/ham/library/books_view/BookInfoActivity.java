@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ham.library.BaseActivity;
@@ -28,12 +30,12 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 public class BookInfoActivity extends BaseActivity {
-    private ItemAdapter adapter;
+    private ReviewItemAdapter adapter;
     private BookEntity bookEntity;
+    private RecyclerView reviews;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
-        this.adapter = new ItemAdapter();
 
         Intent this_intent = getIntent();
 
@@ -65,6 +67,12 @@ public class BookInfoActivity extends BaseActivity {
             }
         });
 
+        this.reviews = findViewById(R.id.reviews);
+        this.reviews.setLayoutManager(new LinearLayoutManager(this));
+        this.reviews.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        this.adapter = new ReviewItemAdapter();
+        this.reviews.setAdapter(this.adapter);
+
         mainViewModel.getBookReviews(id).observe(this, new Observer<List<ReviewEntity>>() {
             @Override
             public void onChanged(List<ReviewEntity> reviewEntities) {
@@ -88,7 +96,7 @@ public class BookInfoActivity extends BaseActivity {
         this.adapter.setDataList(reviewsFromBD);
     }
 
-    public final static class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    public final static class ReviewItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private ArrayList<Review> dataList = new ArrayList<>();
 
         public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -122,14 +130,14 @@ public class BookInfoActivity extends BaseActivity {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
-            View contactView = inflater.inflate(R.layout.book_item_layout, parent, false);
-            return new BookInfoActivity.ItemAdapter.ViewHolder(contactView);
+            View contactView = inflater.inflate(R.layout.review_item_layout, parent, false);
+            return new ReviewItemAdapter.ViewHolder(contactView);
         }
 
         @Override
         public void onBindViewHolder(@NonNull @NotNull RecyclerView.ViewHolder holder, int position) {
             Review data = this.dataList.get(position);
-            ((BookInfoActivity.ItemAdapter.ViewHolder) holder).bind(data);
+            ((ReviewItemAdapter.ViewHolder) holder).bind(data);
         }
 
         @Override

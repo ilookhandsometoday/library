@@ -23,6 +23,7 @@
 
         </activity>
         <activity android:name=".books_view.BookInfoActivity">
+        </activity>
 
         <activity android:name=".Rating" android:label="Оставить отзыв">
         </activity>
