@@ -39,26 +39,26 @@
         style="@style/Theme.Library.Label"
         android:layout_weight="5"/>
 
-    <TextView
-        android:id="@+id/info_bookcase"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        style="@style/Theme.Library.Label"
-        android:layout_weight="5"/>
-
-    <TextView
-        android:id="@+id/info_shelf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        style="@style/Theme.Library.Label"
-        android:layout_weight="5"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/reviews"
         android:layout_width="match_parent"
         android:layout_height="254dp"
         android:layout_weight="25"
         tools:listitem="@layout/review_item_layout" />
+
+    <Button
+        android:id="@+id/write_review_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/write_review"
+        style="@style/Theme.Library.Button"/>
+
+    <Button
+        android:id="@+id/delete_book_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/delete_book"
+        style="@style/Theme.Library.Button"/>
 </LinearLayout>

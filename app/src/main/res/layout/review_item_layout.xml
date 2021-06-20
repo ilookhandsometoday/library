@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ItemBookName" />
 
     <TextView
-        android:id="@+id/rating_info"
+        android:id="@+id/rating_review"
         style="@style/Theme.Library.RatingLabel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
