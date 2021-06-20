@@ -44,6 +44,9 @@ public class LibraryViewModel extends AndroidViewModel {
     */
     public LiveData<List<PlaceEntity>> getPlacesByBookcase(Integer bookcaseNum) { return repository.getPlacesByBookcase(bookcaseNum); }
     public LiveData<List<PlaceEntity>> getPlacesByBookcaseAndShelf(Integer bookcaseNum, Integer shelfNum) { return repository.getPlacesByBookcaseAndShelf(bookcaseNum, shelfNum); }
+    public LiveData<List<BookEntity>> getAllBooksNoShelf(){return repository.getAllBooksNoShelf();}
+    public LiveData<List<Place>> getAllPlaces(){return repository.getAllPlaces();}
+    public void insertPlaces(List<Place> data){repository.insertPlaces(data);}
     public void insertPlace(Place data) {
         repository.insertPlace(data);
     }

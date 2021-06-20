@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">library</string>
     <string name="SA_name">Хранилище книг</string>
-    <string name="SA_label1">Выберите номер стеллажа</string>
-    <string name="SA_label2">Выберите номер полки</string>
+    <string name="SA_label1">Стеллаж</string>
+    <string name="SA_label2">Полка</string>
     <string name="SA_imagedesc">replace book</string>
     <string name="SA_nobooks">Нет книг</string>
     <string name="SA_nobooks_rack_1">В стеллаже </string>
@@ -15,4 +15,14 @@
     <string name="SA_dialog_truemes_2">» перемещена</string>
     <string name="SA_dialog_falsemes_1">Книга «</string>
     <string name="SA_dialog_falsemes_2">» осталась на месте</string>
+    <string name="SA_addBookBtn">Добавить книгу сюда</string>
+    <string name="SA_noBooksToAdd">Все книги находятся на полках</string>
+    <string name="SA_addBookdialod_name">Добавление книги на полку</string>
+    <string name="SA_noBooksChosen">Книга не выбрана</string>
+    <string name="SA_lastRack">Невозможно удалить единственный стеллаж</string>
+    <string name="SA_lastShelf">Невозможно удалить единственную полку в стеллаже: удалите весь стеллаж</string>
+    <string name="SA_rackAdded">Стеллаж добавлен</string>
+    <string name="SA_rackDeleted">Последний стеллаж удалён</string>
+    <string name="SA_shelfAdded">Полка добавлена в стеллаж</string>
+    <string name="SA_shelfDeleted">Последняя полка в стеллаже удалена</string>
 </resources>

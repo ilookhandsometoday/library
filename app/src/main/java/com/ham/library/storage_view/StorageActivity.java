@@ -7,18 +7,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ham.library.R;
 import com.ham.library.dao.LibraryViewModel;
+import com.ham.library.dao.entity.BookEntity;
 import com.ham.library.dao.entity.Place;
 import com.ham.library.dao.entity.PlaceEntity;
 import com.shawnlin.numberpicker.NumberPicker;
@@ -33,12 +33,11 @@ import com.shawnlin.numberpicker.NumberPicker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
-public class StorageActivity extends AppCompatActivity implements ReplaceDialog.OnCompleteListener{
+public class StorageActivity extends AppCompatActivity implements ReplaceDialog.OnCompleteReplaceListener, AddBookDialog.OnCompleteAddingListener {
 
     private NumberPicker rackNum;
     private NumberPicker shelfNum;
@@ -48,11 +47,25 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
 
     private Boolean isRackEmpty = false;
 
-    ProgressBar pb;
+    private ProgressBar pb;
+    private Button addBookBtn;
     private RecyclerView storageView;
     private ItemAdapter adapter;
     private List<StorageItem> list;
+    private List<BookEntity> booksNoShelfList;
     private LibraryViewModel LVM;
+
+    private Button plusRack;
+    private Button minusRack;
+    private Button plusShelf;
+    private Button minusShelf;
+
+    private static List<Integer[]> shelves;
+
+    private Integer maxId = null;
+
+    private ArrayList<Toast> allToasts = new ArrayList<>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,56 +74,284 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
 
         LVM = ViewModelProviders.of(this).get(LibraryViewModel.class);
         rackNum = findViewById(R.id.rackNum);
-        shelfNum = findViewById(R.id.shelfNum);
-        pb = findViewById(R.id.progressBar);
-        manager = getSupportFragmentManager();
+        rackNum.setFadingEdgeEnabled(true);// Set fading edge enabled
+        rackNum.setScrollerEnabled(true);// Set scroller enabled
+        rackNum.setWrapSelectorWheel(true);// Set wrap selector wheel
+        rackNum.setAccessibilityDescriptionEnabled(true);/// Set accessibility description enabled
+        rackNum.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            if(oldVal!=newVal) {
+                selectedRack = newVal;
+                setNumberPickers();
+                initData();
 
-        setNumPickers();
+            }
+        });
+        shelfNum = findViewById(R.id.shelfNum);
+        shelfNum.setFadingEdgeEnabled(true);// Set fading edge enabled
+        shelfNum.setScrollerEnabled(true);// Set scroller enabled
+        shelfNum.setWrapSelectorWheel(true);// Set wrap selector wheel
+        shelfNum.setAccessibilityDescriptionEnabled(true);/// Set accessibility description enabled
+        shelfNum.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            if(oldVal!=newVal) {
+                selectedShelf = newVal;
+                setNumberPickers();
+                initData();
+            }
+        });
+        pb = findViewById(R.id.progressBar);
+        addBookBtn = findViewById(R.id.addBookBtn);
+        addBookBtn.setOnClickListener(a -> onAddBookClick());
+        manager = getSupportFragmentManager();
 
         storageView = findViewById(R.id.storageView);
         storageView.setLayoutManager(new LinearLayoutManager(this));
         storageView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
         adapter = new ItemAdapter(this::onStorageItemClick);
+
+        plusRack = findViewById(R.id.rackPlusBtn);
+        plusRack.setOnClickListener(a -> onPlusClick(1));
+        minusRack = findViewById(R.id.rackMinusBtn);
+        minusRack.setOnClickListener(a -> onRackMinusClick());
+        plusShelf = findViewById(R.id.shelfPlusBtn);
+        plusShelf.setOnClickListener(a -> onPlusClick(0));
+        minusShelf = findViewById(R.id.shelfMinusBtn);
+        minusShelf.setOnClickListener(a -> onShelfMinusClick());
+
+        createNewShelves();
+       // Log.d("mydb", "shelves.size " + shelves.size());
+        setNumberPickers();
         initData();
+    }
+
+    private void createNewShelves(){
+        shelves= new ArrayList<>();
+
+        for(int i = 1; i<5; i++) {
+            Integer[] mas = {i, 3};
+            shelves.add(mas);
+        }
     }
 
     private void initData(){
         list = new ArrayList<>();
-
         getBookList();
+        new CountDownTimer(1000, 1000) {
+            public void onTick(long millisUntilFinished) { }
+            public void onFinish() {
+                if(allToasts.size()!=0) killAllToast();
+            }
+        }.start();
     }
 
+    private void onPlusClick(int i) {
+        Integer[] item;
+        if(i == 1) {
+            item = new Integer[]{getMaxRack() + 1, 1};
+            shelves.add(item);
+            Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_rackAdded),
+                    Toast.LENGTH_LONG);
+            allToasts.add(t);
+            t.show();
+        }
+        else {
+            int newMaxShelf =  getMaxShelfByRack(selectedRack) + 1;
+            for (Integer[] it: shelves) {
+                if(it[0] == selectedRack) it[1] = newMaxShelf;
+            }
+            Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_shelfAdded),
+                    Toast.LENGTH_LONG);
+            allToasts.add(t);
+            t.show();
+        }
+        setNumberPickers();
+        initData();
+    }
+
+
+    private void onRackMinusClick() {
+        if(getMaxRack() == 1) {
+            Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_lastRack),
+                    Toast.LENGTH_LONG);
+            allToasts.add(t);
+            t.show();
+            return;
+        }
+        Integer rack = getMaxRack();
+        Integer maxshelf = getMaxShelfByRack(rack);
+        List<Place> placeIds = new ArrayList<>();
+        for (Integer[] it:shelves) {
+            if(it[0] == rack)
+                LVM.getPlacesByBookcaseAndShelf(rack, it[1]).observe(this, bookEntities -> {
+                if(bookEntities.size() > 0)
+                    for (PlaceEntity pl:bookEntities) {
+                        placeIds.add(pl.placeEntity);
+                    }
+                });
+        }
+        new CountDownTimer(800, 1000) {
+            public void onTick(long millisUntilFinished) {
+                storageView.setVisibility(RecyclerView.INVISIBLE);
+                pb.setVisibility(ProgressBar.VISIBLE);
+            }
+            public void onFinish() {
+                if(placeIds.size() > 0){
+                    for (Place it:placeIds)
+                        Executors.newSingleThreadExecutor().execute(() -> LVM.deletePlace(it));
+                }
+                new CountDownTimer(500, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        //
+                    }
+                    public void onFinish() {
+                        for (Iterator<Integer[]> iterator = shelves.iterator(); iterator.hasNext(); ) {
+                            Integer[] value = iterator.next();
+                            if (value[0] == rack && value[1] == maxshelf) {
+                                iterator.remove();
+                            }
+                        }
+                        startTimer();
+                        if(getMaxRack() < selectedRack) {
+                            selectedRack=getMaxRack();
+                            selectedShelf = 1;
+                        }
+                        setNumberPickers();
+                        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_rackDeleted),
+                                Toast.LENGTH_LONG);
+                        allToasts.add(t);
+                        t.show();
+                        initData();
+                    }
+                }.start();
+            }
+        }.start();
+
+    }
+
+
+    private void onShelfMinusClick() {
+        if(getMaxShelfByRack(selectedRack) == 1) {
+            Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_lastShelf),
+                    Toast.LENGTH_LONG);
+            allToasts.add(t);
+            t.show();
+            return;
+        }
+        Integer rack = selectedRack;
+        Integer maxShelf = getMaxShelfByRack(rack);
+        final Place[] p = {new Place()};
+            LVM.getPlacesByBookcaseAndShelf(rack, maxShelf).observe(this, bookEntities -> {
+                if (bookEntities.size() > 0)
+                    for (PlaceEntity pl : bookEntities) {
+                        p[0] = pl.placeEntity;
+                    }
+            });
+        new CountDownTimer(500, 1000) {
+            public void onTick(long millisUntilFinished) {
+                storageView.setVisibility(RecyclerView.INVISIBLE);
+                pb.setVisibility(ProgressBar.VISIBLE);
+            }
+            public void onFinish() {
+                Executors.newSingleThreadExecutor().execute(() -> LVM.deletePlace(p[0]));
+                new CountDownTimer(500, 1000) {
+                    public void onTick(long millisUntilFinished) {
+                        //
+                    }
+                    public void onFinish() {
+                        int shelf = getMaxShelfByRack(rack)-1;
+                        for (Integer[] i:shelves) {
+                            if(i[0] == rack) i[1]=shelf;
+                        }
+                        if(getMaxShelfByRack(selectedRack) < selectedShelf) selectedShelf=getMaxShelfByRack(selectedRack);
+                        setNumberPickers();
+                        storageView.setVisibility(RecyclerView.VISIBLE);
+                        pb.setVisibility(ProgressBar.INVISIBLE);
+                        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_shelfDeleted),
+                                Toast.LENGTH_LONG);
+                        allToasts.add(t);
+                        t.show();
+                        initData();
+                    }
+                }.start();
+            }
+        }.start();
+
+    }
+
+
+    private void setNumberPickers(){
+
+        rackNum.setMaxValue(getMaxRack());
+        rackNum.setMinValue(1);
+        rackNum.setValue(selectedRack);
+        String[] racks = new String[getMaxRack()];
+        for (int i = 0; i<racks.length; i++) {
+            racks[i]= String.valueOf(i + 1);
+        }
+        rackNum.setDisplayedValues(racks);
+
+        shelfNum.setMaxValue(getMaxShelfByRack(selectedRack));
+        shelfNum.setMinValue(1);
+        shelfNum.setValue(selectedShelf);
+        String[] shelvesMas = new String[getMaxShelfByRack(selectedRack)];
+        for (int i = 0; i<shelvesMas.length; i++) {
+            shelvesMas[i]= String.valueOf(i + 1);
+        }
+        shelfNum.setDisplayedValues(shelvesMas);
+    }
+
+
+
+    private void onAddBookClick(){
+        LVM.getAllBooksNoShelf().observe(this, bookEntities -> {
+            booksNoShelfList = new ArrayList<>();
+            if(bookEntities.size()!=0) {
+                for (BookEntity bookEnt:bookEntities) {
+                    BookEntity be = new BookEntity();
+                    be.id=bookEnt.id;
+                    be.author=bookEnt.author;
+                    be.title=bookEnt.title;
+                    booksNoShelfList.add(be);
+                }
+                String[] booksNameList = new String[booksNoShelfList.size()];
+                int i = 0;
+                for(BookEntity b : booksNoShelfList) {
+                    booksNameList[i] = b.author + " «" + b.title + "»";
+                    i++;
+                }
+
+                AddBookDialog dialog = new AddBookDialog();
+                Bundle args = new Bundle();
+                args.putStringArray("books", booksNameList);
+                dialog.setArguments(args);
+                FragmentTransaction transaction = manager.beginTransaction();
+                dialog.show(transaction, "add book dialog");
+            }
+            else {
+                Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_noBooksToAdd),
+                        Toast.LENGTH_LONG);
+                allToasts.add(t);
+                t.show();
+            }
+        });
+    }
+
+
     private void getBookList(){
-        checkRack();
-        if(!isRackEmpty)
-            LVM.getPlacesByBookcaseAndShelf(selectedRack,selectedShelf).observe(this, placeEntities -> {
+        //Log.d("mydb", "selectedRack " + selectedRack.getClass() + " "+ selectedRack);
+        //Log.d("mydb", "selectedShelf " + selectedShelf.getClass() + " "+ selectedShelf);
+
+        LVM.getPlacesByBookcaseAndShelf(selectedRack,selectedShelf).observe(this, placeEntities -> {
                 for(PlaceEntity plEnt: placeEntities) {
                     if (plEnt != null) list.add(createItem(plEnt));
                 }
-                Log.d("mydb", "Кол-во книг на полке: " + list.size());
                 if(list.size() == 0) {
                     NoStorageItem noItems = new NoStorageItem();
-                    Log.d("mydb", "Создан объект сообщения");
                     noItems.setMessage(getString(R.string.SA_nobooks));
-                    Log.d("mydb", "Сообщение записано");
                     list.add(noItems);
-                    Log.d("mydb", "Сообщение в список добавлено");
                 }
                 adapter.setDataList(list);
                 storageView.setAdapter(adapter);
             });
-    }
-
-    private void checkRack(){
-        LVM.getPlacesByBookcase(selectedRack).observe(this, placeEntities -> {
-            if(placeEntities.size() == 0)
-            {
-                String mes = getString(R.string.SA_nobooks_rack_1) + " " + selectedRack + " " + getString(R.string.SA_nobooks_rack_2);
-                Toast.makeText(getApplicationContext(), mes, Toast.LENGTH_SHORT).show();
-                isRackEmpty = true;
-            }
-            else isRackEmpty = false;
-        });
     }
 
     private StorageItem createItem(PlaceEntity data){
@@ -125,46 +366,69 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         return si;
     }
 
-    private void setNumPickers(){
-        rackNum.setMaxValue(10);
-        rackNum.setMinValue(1);
-        rackNum.setValue(1);
-        rackNum.setFadingEdgeEnabled(true);// Set fading edge enabled
-        rackNum.setScrollerEnabled(true);// Set scroller enabled
-        rackNum.setWrapSelectorWheel(true);// Set wrap selector wheel
-        rackNum.setAccessibilityDescriptionEnabled(true);/// Set accessibility description enabled
-        rackNum.setOnValueChangedListener((picker, oldVal, newVal) -> {
-            if(oldVal!=newVal) {
-                selectedRack = newVal;
-                initData();
-            }
-        });
-
-        shelfNum.setMaxValue(5);
-        shelfNum.setMinValue(1);
-        shelfNum.setValue(1);
-        shelfNum.setFadingEdgeEnabled(true);// Set fading edge enabled
-        shelfNum.setScrollerEnabled(true);// Set scroller enabled
-        shelfNum.setWrapSelectorWheel(true);// Set wrap selector wheel
-        shelfNum.setAccessibilityDescriptionEnabled(true);/// Set accessibility description enabled
-        shelfNum.setOnValueChangedListener((picker, oldVal, newVal) -> {
-            if(oldVal!=newVal) {
-                selectedShelf = newVal;
-                initData();
-            }
-        });
+    private Integer getMaxRack(){
+        Integer max = -1;
+        for (Integer[] i : shelves) {
+            if(max == -1) max = i[0];
+            else if (i[0] > max) max=i[0];
+        }
+        return max;
     }
+
+    private Integer getMaxShelfByRack(Integer rack){
+        for (Integer[] i:shelves) {
+            if (i[0] == rack) return i[1];
+        }
+        return 0;
+    }
+
 
     private void onStorageItemClick(StorageItem storageItem) { }
 
     @Override
-    public void onCloseDialog(Integer place, Integer book, Integer rack, Integer shelf) {
+    public void onCloseReplaceDialog(Integer place, Integer book, Integer rack, Integer shelf) {
+        Log.d("mydb", "got Rack "+rack+" and Shelf "+ shelf);
         Place p = new Place();
         p.id = place;
         p.bookID = book;
         p.bookcase = rack;
         p.shelf = shelf;
         Executors.newSingleThreadExecutor().execute(() -> LVM.updatePlace(p));
+        startTimer();
+    }
+
+    @Override
+    public void onCloseAddingDialog(Integer bookId) {
+        LVM.getAllPlaces().observe(this, places -> {
+            int counter = 0;
+            for(Place pl: places) {
+                if (pl != null && counter == 0) {
+                    maxId = pl.id;
+                    counter++;
+                }
+                else if(pl != null && maxId < pl.id) maxId=pl.id;
+            }
+        });
+
+        new CountDownTimer(200, 1000) {
+            public void onTick(long millisUntilFinished) {
+                storageView.setVisibility(RecyclerView.INVISIBLE);
+                pb.setVisibility(ProgressBar.VISIBLE);
+            }
+            public void onFinish() {
+                Place p = new Place();
+                if(maxId == null) p.id = 1;
+                else p.id = maxId + 1;
+                p.bookID = booksNoShelfList.get(bookId).id;
+                p.bookcase = selectedRack;
+                p.shelf = selectedShelf;
+                Executors.newSingleThreadExecutor().execute(() -> LVM.insertPlace(p));
+                startTimer();
+            }
+        }.start();
+    }
+
+    private void startTimer(){
         new CountDownTimer(500, 1000) {
             public void onTick(long millisUntilFinished) {
                 storageView.setVisibility(RecyclerView.INVISIBLE);
@@ -176,6 +440,14 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
                 initData();
             }
         }.start();
+    }
+
+    private void killAllToast(){
+        for(Toast t:allToasts){
+            if(t!=null) {
+                t.cancel();
+            }
+        }
     }
 
     //////////////////////////////////////
@@ -198,7 +470,6 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
             Context context = parent.getContext();
             LayoutInflater inflater = LayoutInflater.from(context);
 
-            Log.d("mydb", "viewType " + viewType);
             if(viewType == TYPE_ITEM){
                 View contactView = inflater.inflate(R.layout.storage_item, parent, false);
                 return new ViewHolder(contactView, context, onItemClick);
@@ -236,7 +507,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
 
     }
     /////////////////////////////////////////////////////////////////
-    public static class ViewHolder extends RecyclerView.ViewHolder implements ReplaceDialog.OnCompleteListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements ReplaceDialog.OnCompleteReplaceListener{
         private final Context context;
         private final OnItemClick onItemClick;
         private Integer bookId;
@@ -281,13 +552,36 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
             args.putInt("placeId", placeId);
             args.putInt("rack", rack);
             args.putInt("shelf", shelf);
+            args.putIntArray("racks", createRacksArr());
+            args.putIntArray("shelves", createShelvesArr());
             dialog.setArguments(args);
             FragmentTransaction transaction = manager.beginTransaction();
             dialog.show(transaction, "dialog");
         }
 
+        private int[] createShelvesArr(){
+            int[] shelvesArr = new int[shelves.size()];
+            int counter = 0;
+            for (Integer[] item : shelves){
+                shelvesArr[counter]=item[1];
+                counter++;
+            }
+            return shelvesArr;
+        }
+
+        private int[] createRacksArr(){
+            int[] racksArr = new int[shelves.size()];
+            int counter = 0;
+            for (Integer[] item : shelves){
+                racksArr[counter]=item[0];
+                counter++;
+            }
+            return racksArr;
+        }
+
+
         @Override
-        public void onCloseDialog(Integer placeId, Integer bookId, Integer rack, Integer shelf) {
+        public void onCloseReplaceDialog(Integer placeId, Integer bookId, Integer rack, Integer shelf) {
             //
         }
     }

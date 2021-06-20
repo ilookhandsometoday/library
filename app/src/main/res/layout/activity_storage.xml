@@ -6,6 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/shelfPlusBtn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:text="+1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toEndOf="@+id/shelfNum"
+        app:layout_constraintTop_toBottomOf="@id/rackPlusBtn"
+        app:layout_constraintVertical_bias="0.021" />
+
+    <Button
+        android:id="@+id/shelfMinusBtn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:text="-1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.627"
+        app:layout_constraintStart_toEndOf="@+id/shelfPlusBtn"
+        app:layout_constraintTop_toBottomOf="@id/rackMinusBtn"
+        app:layout_constraintVertical_bias="0.021" />
+
     <TextView
         android:id="@+id/chooseRackLbl"
         android:layout_width="wrap_content"
@@ -25,10 +49,10 @@
         android:layout_centerInParent="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toEndOf="@+id/chooseRackLbl"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
+        app:layout_constraintVertical_bias="0.026"
         app:np_height="64dp"
         app:np_orientation="horizontal"
         app:np_textSize="10dp"
@@ -54,10 +78,10 @@
         android:layout_centerInParent="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.603"
+        app:layout_constraintHorizontal_bias="0.198"
         app:layout_constraintStart_toEndOf="@+id/chooseShelfLbl"
         app:layout_constraintTop_toBottomOf="@+id/rackNum"
-        app:layout_constraintVertical_bias="0.03"
+        app:layout_constraintVertical_bias="0.026"
         app:np_height="64dp"
         app:np_orientation="horizontal"
         app:np_textSize="10dp"
@@ -66,12 +90,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/storageView"
-        android:layout_width="402dp"
-        android:layout_height="566dp"
+        android:layout_width="403dp"
+        android:layout_height="510dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shelfNum"
+        app:layout_constraintVertical_bias="0.16"
         tools:listitem="@layout/storage_item" />
 
     <ProgressBar
@@ -85,4 +110,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/rackPlusBtn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:text="+1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.28"
+        app:layout_constraintStart_toEndOf="@+id/rackNum"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
+        android:id="@+id/rackMinusBtn"
+        android:layout_width="51dp"
+        android:layout_height="55dp"
+        android:text="-1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.627"
+        app:layout_constraintStart_toEndOf="@+id/rackPlusBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023" />
+
+    <Button
+        android:id="@+id/addBookBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/SA_addBookBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/storageView"
+        app:layout_constraintVertical_bias="0.256" />
 </androidx.constraintlayout.widget.ConstraintLayout>
