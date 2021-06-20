@@ -11,7 +11,7 @@ public class Review {
     private double rating;
     private Date timestamp;
 
-    public Review(Integer id, String text, Integer bookID, double rating, Date timestamp) {
+    public Review(Integer id, String text, Integer bookID, int rating, Date timestamp) {
         this.id = id;
         this.text = text;
         this.bookID = bookID;
