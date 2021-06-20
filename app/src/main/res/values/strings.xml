@@ -6,4 +6,8 @@
     <string name="main_menu_compilation_button">Подборки</string>
     <string name="books_activity_title">Книги в вашей библиотеке</string>
     <string name="books_activity_add_button">Добавить книгу</string>
+    <string name="add_books_title">Добавить книгу</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="sort">Сортировать</string>
 </resources>

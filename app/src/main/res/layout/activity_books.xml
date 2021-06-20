@@ -24,10 +24,18 @@
         tools:listitem="@layout/book_item_layout" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/sort_button"
+        style="@style/Theme.Library.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="@string/books_activity_add_button"
-        style="@style/Theme.Library.Button"/>
+        android:text="@string/sort" />
+
+    <Button
+        android:id="@+id/add_book_button"
+        style="@style/Theme.Library.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="@string/books_activity_add_button" />
 </LinearLayout>

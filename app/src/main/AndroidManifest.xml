@@ -19,6 +19,10 @@
         <activity android:name=".books_view.BooksActivity">
 
         </activity>
+
+        <activity android:name=".books_view.InsertBookActivity">
+
+        </activity>
     </application>
 
 </manifest>
