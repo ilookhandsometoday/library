@@ -2,10 +2,14 @@ package com.ham.library;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
 import android.widget.Button;
+
+import com.ham.library.storage_view.StorageActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -25,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         storage_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+                startActivity(intent);
             }
         });
 

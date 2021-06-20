@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ham.library.BaseActivity;
 import com.ham.library.R;
 import com.ham.library.dao.LibraryViewModel;
 import com.ham.library.dao.entity.BookEntity;
@@ -37,7 +38,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class StorageActivity extends AppCompatActivity implements ReplaceDialog.OnCompleteReplaceListener, AddBookDialog.OnCompleteAddingListener {
+public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCompleteReplaceListener, AddBookDialog.OnCompleteAddingListener {
 
     private NumberPicker rackNum;
     private NumberPicker shelfNum;
@@ -53,7 +54,6 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
     private ItemAdapter adapter;
     private List<StorageItem> list;
     private List<BookEntity> booksNoShelfList;
-    private LibraryViewModel LVM;
 
     private Button plusRack;
     private Button minusRack;
@@ -72,7 +72,6 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_storage);
 
-        LVM = ViewModelProviders.of(this).get(LibraryViewModel.class);
         rackNum = findViewById(R.id.rackNum);
         rackNum.setFadingEdgeEnabled(true);// Set fading edge enabled
         rackNum.setScrollerEnabled(true);// Set scroller enabled
@@ -118,7 +117,6 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         minusShelf.setOnClickListener(a -> onShelfMinusClick());
 
         createNewShelves();
-       // Log.d("mydb", "shelves.size " + shelves.size());
         setNumberPickers();
         initData();
     }
@@ -181,7 +179,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         List<Place> placeIds = new ArrayList<>();
         for (Integer[] it:shelves) {
             if(it[0] == rack)
-                LVM.getPlacesByBookcaseAndShelf(rack, it[1]).observe(this, bookEntities -> {
+                mainViewModel.getPlacesByBookcaseAndShelf(rack, it[1]).observe(this, bookEntities -> {
                 if(bookEntities.size() > 0)
                     for (PlaceEntity pl:bookEntities) {
                         placeIds.add(pl.placeEntity);
@@ -196,7 +194,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
             public void onFinish() {
                 if(placeIds.size() > 0){
                     for (Place it:placeIds)
-                        Executors.newSingleThreadExecutor().execute(() -> LVM.deletePlace(it));
+                        Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(it));
                 }
                 new CountDownTimer(500, 1000) {
                     public void onTick(long millisUntilFinished) {
@@ -239,7 +237,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         Integer rack = selectedRack;
         Integer maxShelf = getMaxShelfByRack(rack);
         final Place[] p = {new Place()};
-            LVM.getPlacesByBookcaseAndShelf(rack, maxShelf).observe(this, bookEntities -> {
+            mainViewModel.getPlacesByBookcaseAndShelf(rack, maxShelf).observe(this, bookEntities -> {
                 if (bookEntities.size() > 0)
                     for (PlaceEntity pl : bookEntities) {
                         p[0] = pl.placeEntity;
@@ -251,7 +249,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
                 pb.setVisibility(ProgressBar.VISIBLE);
             }
             public void onFinish() {
-                Executors.newSingleThreadExecutor().execute(() -> LVM.deletePlace(p[0]));
+                Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(p[0]));
                 new CountDownTimer(500, 1000) {
                     public void onTick(long millisUntilFinished) {
                         //
@@ -302,7 +300,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
 
 
     private void onAddBookClick(){
-        LVM.getAllBooksNoShelf().observe(this, bookEntities -> {
+        mainViewModel.getAllBooksNoShelf().observe(this, bookEntities -> {
             booksNoShelfList = new ArrayList<>();
             if(bookEntities.size()!=0) {
                 for (BookEntity bookEnt:bookEntities) {
@@ -337,10 +335,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
 
 
     private void getBookList(){
-        //Log.d("mydb", "selectedRack " + selectedRack.getClass() + " "+ selectedRack);
-        //Log.d("mydb", "selectedShelf " + selectedShelf.getClass() + " "+ selectedShelf);
-
-        LVM.getPlacesByBookcaseAndShelf(selectedRack,selectedShelf).observe(this, placeEntities -> {
+        mainViewModel.getPlacesByBookcaseAndShelf(selectedRack,selectedShelf).observe(this, placeEntities -> {
                 for(PlaceEntity plEnt: placeEntities) {
                     if (plEnt != null) list.add(createItem(plEnt));
                 }
@@ -393,13 +388,13 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
         p.bookID = book;
         p.bookcase = rack;
         p.shelf = shelf;
-        Executors.newSingleThreadExecutor().execute(() -> LVM.updatePlace(p));
+        Executors.newSingleThreadExecutor().execute(() -> mainViewModel.updatePlace(p));
         startTimer();
     }
 
     @Override
     public void onCloseAddingDialog(Integer bookId) {
-        LVM.getAllPlaces().observe(this, places -> {
+        mainViewModel.getAllPlaces().observe(this, places -> {
             int counter = 0;
             for(Place pl: places) {
                 if (pl != null && counter == 0) {
@@ -422,7 +417,7 @@ public class StorageActivity extends AppCompatActivity implements ReplaceDialog.
                 p.bookID = booksNoShelfList.get(bookId).id;
                 p.bookcase = selectedRack;
                 p.shelf = selectedShelf;
-                Executors.newSingleThreadExecutor().execute(() -> LVM.insertPlace(p));
+                Executors.newSingleThreadExecutor().execute(() -> mainViewModel.insertPlace(p));
                 startTimer();
             }
         }.start();
