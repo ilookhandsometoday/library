@@ -19,12 +19,18 @@
         <activity android:name=".books_view.BooksActivity">
 
         </activity>
-
         <activity android:name=".books_view.InsertBookActivity">
 
         </activity>
         <activity android:name=".books_view.BookInfoActivity">
 
+        <activity android:name=".Rating" android:label="Оставить отзыв">
+        </activity>
+
+        <activity android:name=".storage_view.StorageActivity" android:label="@string/SA_name">
+        </activity>
+
+        <activity android:name=".Compilations" android:label="Подборки лучших">
         </activity>
     </application>
 

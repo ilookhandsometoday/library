@@ -10,6 +10,8 @@ import android.widget.Button;
 
 import com.ham.library.books_view.BooksActivity;
 
+import com.ham.library.storage_view.StorageActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         storage_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StorageActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -36,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         compilation_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MainActivity.this, Compilations.class);
+                startActivity(intent);
             }
         });
     }

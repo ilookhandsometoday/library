@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity(tableName = "review", foreignKeys =
         {@ForeignKey(entity = BookEntity.class, parentColumns = "id", childColumns = "book_id", onDelete = ForeignKey.CASCADE)})
 public class Review {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public int id;
 
     @ColumnInfo(name = "text")
