@@ -46,16 +46,20 @@ public interface LibDao {
     @Transaction
     @Query("SELECT * FROM `place` WHERE bookcase = :bookcase_num AND shelf = :shelf_num")
     LiveData<List<PlaceEntity>> getBooksInBookcaseAndShelf(Integer bookcase_num, Integer shelf_num);
+    @Query("SELECT * FROM `book` WHERE id not in (select book_id from `place`)")
+    LiveData<List<BookEntity>> getAllBooksNoShelf();
+    @Query("SELECT * FROM `place`")
+    LiveData<List<Place>> getAllPlaces();
     @Transaction
     @Insert
     void insertPlaces(List<Place> data);
-    @Transaction
+
     @Insert
     void insertPlace(Place data);
     @Transaction
     @Update
     void updatePlace(Place data);
-    @Transaction
+
     @Delete
     void deletePlace(Place data);
 

@@ -47,6 +47,9 @@ public class Repository {
     */
     public LiveData<List<PlaceEntity>> getPlacesByBookcase(Integer bookcaseNum) { return dao.getBooksInBookcase(bookcaseNum); }
     public LiveData<List<PlaceEntity>> getPlacesByBookcaseAndShelf(Integer bookcaseNum, Integer shelfNum) { return dao.getBooksInBookcaseAndShelf(bookcaseNum, shelfNum); }
+    public LiveData<List<BookEntity>> getAllBooksNoShelf(){return dao.getAllBooksNoShelf();}
+    public LiveData<List<Place>> getAllPlaces(){return dao.getAllPlaces();}
+    public void insertPlaces(List<Place> data){dao.insertPlaces(data);}
     public void insertPlace(Place data) {
         dao.insertPlace(data);
     }
