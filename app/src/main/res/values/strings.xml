@@ -25,4 +25,8 @@
     <string name="SA_rackDeleted">Последний стеллаж удалён</string>
     <string name="SA_shelfAdded">Полка добавлена в стеллаж</string>
     <string name="SA_shelfDeleted">Последняя полка в стеллаже удалена</string>
+    <string name="main_menu_title">Домашняя библиотека</string>\
+    <string name="main_menu_books_button">Книги</string>
+    <string name="main_menu_storage_button">Места хранения</string>
+    <string name="main_menu_compilation_button">Подборки</string>
 </resources>

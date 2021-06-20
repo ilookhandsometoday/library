@@ -59,10 +59,11 @@ public class LibraryViewModel extends AndroidViewModel {
     /*
         Review queries
     */
+    public LiveData<List<ReviewEntity>> getBookReviews(Integer bookID) { return repository.getBookReviews(bookID); }
     public LiveData<List<ReviewEntity>> getLastReview(Integer bookID) { return repository.getLastReview(bookID); }
-    public LiveData<List<ReviewEntity>> getReviewsBetweenDates(Integer bookID, Date start_time, Date end_time) { return repository.getReviewsBetweenDates(bookID, start_time, end_time); }
-    public LiveData<List<ReviewEntity>> getReviewsByRating(Integer bookID, Integer rating) { return repository.getReviewsByRating(bookID, rating); }
-    public LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer bookID, Integer rating, Date start_time, Date end_time) { return repository.getReviewsByRatingAndDate(bookID, rating, start_time, end_time); }
+    public LiveData<List<ReviewEntity>> getReviewsBetweenDates(Date start_time, Date end_time) { return repository.getReviewsBetweenDates(start_time, end_time); }
+    public LiveData<List<ReviewEntity>> getReviewsByRating(Integer rating) { return repository.getReviewsByRating(rating); }
+    public LiveData<List<ReviewEntity>> getReviewsByRatingAndDate(Integer rating, Date start_time, Date end_time) { return repository.getReviewsByRatingAndDate(rating, start_time, end_time); }
     public void insertReview(Review data) {
         repository.insertReview(data);
     }
