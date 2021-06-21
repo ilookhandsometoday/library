@@ -4,7 +4,7 @@
     <string name="SA_label1">Стеллаж</string>
     <string name="SA_label2">Полка</string>
     <string name="SA_imagedesc">replace book</string>
-    <string name="SA_nobooks">Нет книг</string>
+    <string name="SA_nobooks">На полке нет книг</string>
     <string name="SA_nobooks_rack_1">В стеллаже </string>
     <string name="SA_nobooks_rack_2"> нет книг</string>
     <string name="SA_dialog_name_1">Перемещение книги «</string>

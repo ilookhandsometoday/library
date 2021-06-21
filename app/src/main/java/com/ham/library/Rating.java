@@ -86,7 +86,7 @@ SHow();
     }
 
     protected int findId(Date data) {
-        String result = Integer.toString(data.getDate())+Integer.toString(data.getMonth())+Integer.toString(data.getHours())+Integer.toString(data.getMinutes())+Integer.toString(data.getSeconds())+Integer.toString(bookId);
+        String result = Integer.toString(data.getDate())+Integer.toString(data.getMonth())+Integer.toString(data.getHours())+Integer.toString(data.getMinutes())+Integer.toString(bookId);
         int ID = Integer.parseInt(result);
         return ID;
     }
@@ -103,8 +103,6 @@ SHow();
                     }
 
 
-                } else{
-                    Toast.makeText(getApplicationContext(), "Произошла ошибка", Toast.LENGTH_LONG).show();
                 }
             }
         });
