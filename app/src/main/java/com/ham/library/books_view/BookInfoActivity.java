@@ -27,8 +27,10 @@ import com.ham.library.dao.model.Review;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 public class BookInfoActivity extends BaseActivity {
@@ -124,8 +126,8 @@ public class BookInfoActivity extends BaseActivity {
 
     public final static class ReviewItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private ArrayList<Review> dataList = new ArrayList<>();
-
         public static class ViewHolder extends RecyclerView.ViewHolder{
+            private SimpleDateFormat sDF = new SimpleDateFormat("EEEE, dd MMM HH:mm:ss yyyy", Locale.forLanguageTag("ru"));
             private TextView timestamp;
             private TextView review;
             private TextView rating;
@@ -137,7 +139,7 @@ public class BookInfoActivity extends BaseActivity {
             }
 
             public void bind(final Review data){
-                this.timestamp.setText(data.getTimestamp().toString());
+                this.timestamp.setText(this.sDF.format(data.getTimestamp()));
                 this.review.setText(data.getText());
                 this.rating.setText("Рейтинг:" + data.getRating());
             }
