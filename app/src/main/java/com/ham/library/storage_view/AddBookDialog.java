@@ -29,9 +29,9 @@ public class AddBookDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(@NonNull Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         booksList = getArguments().getStringArray("books");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.SA_addBookdialod_name))
                 // добавляем переключатели
                 .setSingleChoiceItems(booksList, -1,

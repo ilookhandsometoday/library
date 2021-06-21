@@ -59,7 +59,7 @@ public interface LibDao {
     @Transaction
     @Update
     void updatePlace(Place data);
-
+    @Transaction
     @Delete
     void deletePlace(Place data);
 

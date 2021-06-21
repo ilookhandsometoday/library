@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@layout/my_edit_text_border">
+    android:background="@layout/my_edit_text_border"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/ItemBookName"
+        android:id="@+id/timestamp"
         style="@style/Theme.Library.BigLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="10dp"
@@ -18,9 +18,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/ItemBookAuthor"
+        android:id="@+id/review_text"
         style="@style/Theme.Library.Label"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
@@ -29,9 +29,9 @@
         app:layout_constraintTop_toBottomOf="@+id/ItemBookName" />
 
     <TextView
-        android:id="@+id/ItemBookRating"
+        android:id="@+id/rating_review"
         style="@style/Theme.Library.RatingLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
@@ -39,6 +39,5 @@
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ItemBookAuthor"
-        app:layout_constraintVertical_bias="0.0" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/ItemBookAuthor" />
+</LinearLayout>

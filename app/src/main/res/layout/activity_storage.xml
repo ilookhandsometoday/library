@@ -16,7 +16,8 @@
         app:layout_constraintHorizontal_bias="0.282"
         app:layout_constraintStart_toEndOf="@+id/shelfNum"
         app:layout_constraintTop_toBottomOf="@id/rackPlusBtn"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintVertical_bias="0.021"
+        style="@style/Theme.Library.Button"/>
 
     <Button
         android:id="@+id/shelfMinusBtn"
@@ -28,19 +29,21 @@
         app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toEndOf="@+id/shelfPlusBtn"
         app:layout_constraintTop_toBottomOf="@id/rackMinusBtn"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintVertical_bias="0.021"
+        style="@style/Theme.Library.Button"/>
 
     <TextView
         android:id="@+id/chooseRackLbl"
+        style="@style/Theme.Library.BigLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/SA_label1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.041" />
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/rackNum"
@@ -49,27 +52,29 @@
         android:layout_centerInParent="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.133"
+        app:layout_constraintHorizontal_bias="0.089"
         app:layout_constraintStart_toEndOf="@+id/chooseRackLbl"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.026"
+        app:layout_constraintVertical_bias="0.023"
         app:np_height="64dp"
         app:np_orientation="horizontal"
         app:np_textSize="10dp"
         app:np_width="180dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        style="@style/Theme.Library.Button"/>
 
     <TextView
         android:id="@+id/chooseShelfLbl"
+        style="@style/Theme.Library.BigLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/SA_label2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chooseRackLbl"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintVertical_bias="0.063" />
 
     <com.shawnlin.numberpicker.NumberPicker
         android:id="@+id/shelfNum"
@@ -121,7 +126,8 @@
         app:layout_constraintHorizontal_bias="0.28"
         app:layout_constraintStart_toEndOf="@+id/rackNum"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.023"
+        style="@style/Theme.Library.Button" />
 
     <Button
         android:id="@+id/rackMinusBtn"
@@ -133,7 +139,8 @@
         app:layout_constraintHorizontal_bias="0.627"
         app:layout_constraintStart_toEndOf="@+id/rackPlusBtn"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintVertical_bias="0.023"
+        style="@style/Theme.Library.Button" />
 
     <Button
         android:id="@+id/addBookBtn"
@@ -144,5 +151,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storageView"
-        app:layout_constraintVertical_bias="0.256" />
+        app:layout_constraintVertical_bias="0.256"
+        style="@style/Theme.Library.Button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

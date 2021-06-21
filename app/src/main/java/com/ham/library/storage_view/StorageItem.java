@@ -1,7 +1,6 @@
 package com.ham.library.storage_view;
 
 public class StorageItem {
-
     private Integer book_id;
     private String book_name;
     private String book_author;

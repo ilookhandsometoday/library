@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_book_info"
+        style="@style/Theme.Library.BigLabel"
+        android:gravity="center"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/info_author"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        style="@style/Theme.Library.Label"
+        android:layout_weight="5"/>
+
+    <TextView
+        android:id="@+id/info_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        style="@style/Theme.Library.Label"
+        android:layout_weight="5"/>
+
+    <TextView
+        android:id="@+id/info_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        style="@style/Theme.Library.Label"
+        android:layout_weight="5"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviews"
+        android:layout_width="match_parent"
+        android:layout_height="254dp"
+        android:layout_weight="25"
+        tools:listitem="@layout/review_item_layout" />
+
+    <Button
+        android:id="@+id/write_review_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/write_review"
+        style="@style/Theme.Library.Button"/>
+
+    <Button
+        android:id="@+id/delete_book_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/delete_book"
+        style="@style/Theme.Library.Button"/>
+</LinearLayout>
