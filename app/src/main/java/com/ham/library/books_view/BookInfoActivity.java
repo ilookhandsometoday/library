@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ham.library.BaseActivity;
 import com.ham.library.R;
+import com.ham.library.Rating;
 import com.ham.library.dao.entity.BookEntity;
 import com.ham.library.dao.entity.ReviewEntity;
 import com.ham.library.dao.model.Book;
@@ -33,6 +35,7 @@ public class BookInfoActivity extends BaseActivity {
     private ReviewItemAdapter adapter;
     private BookEntity bookEntity;
     private RecyclerView reviews;
+    private Integer id;
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_info);
@@ -42,7 +45,7 @@ public class BookInfoActivity extends BaseActivity {
         String author_string = this_intent.getStringExtra("author");
         String title_string = this_intent.getStringExtra("title");
         double rating = this_intent.getDoubleExtra("rating", 0);
-        Integer id = this_intent.getIntExtra("id", 0);
+        this.id = this_intent.getIntExtra("id", 0);
 
 
         TextView info_author = findViewById(R.id.info_author);
@@ -67,6 +70,14 @@ public class BookInfoActivity extends BaseActivity {
             }
         });
 
+        Button writeReviewButton = findViewById(R.id.write_review_button);
+        writeReviewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openReviewActivity();
+            }
+        });
+
         this.reviews = findViewById(R.id.reviews);
         this.reviews.setLayoutManager(new LinearLayoutManager(this));
         this.reviews.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -79,6 +90,21 @@ public class BookInfoActivity extends BaseActivity {
                 fetchData(reviewEntities);
             }
         });
+    }
+
+    private void openReviewActivity(){
+        Intent intent = new Intent(this, Rating.class);
+        intent.putExtra("bookId", this.id);
+        startActivityForResult(intent, 11);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data == null){
+            return ;
+        }
+        Toast.makeText(getApplicationContext(), "Изменения сохранены", Toast.LENGTH_LONG).show();
     }
 
     private void deleteBook(){

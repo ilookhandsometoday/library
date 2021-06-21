@@ -66,14 +66,6 @@ public class BooksActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    public void fetchData(List<BookEntity> bookEntities){
-        ArrayList<Book> booksFromBD = new ArrayList<>();
-        for (BookEntity listEntity : bookEntities) {
-            booksFromBD.add(new Book(listEntity.id, listEntity.title, listEntity.author, listEntity.rating));
-        }
-        this.adapter.setDataList(booksFromBD);
-    }
-
     public void sortButton(){
         this.mainViewModel.getBooksOrderByRating().observe(this, new Observer<List<BookEntity>>(){
 
@@ -92,6 +84,14 @@ public class BooksActivity extends BaseActivity {
                 fetchData(bookEntities);
             }
         });
+    }
+
+    public void fetchData(List<BookEntity> bookEntities){
+        ArrayList<Book> booksFromBD = new ArrayList<>();
+        for (BookEntity listEntity : bookEntities) {
+            booksFromBD.add(new Book(listEntity.id, listEntity.title, listEntity.author, listEntity.rating));
+        }
+        this.adapter.setDataList(booksFromBD);
     }
 
     public final static class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
