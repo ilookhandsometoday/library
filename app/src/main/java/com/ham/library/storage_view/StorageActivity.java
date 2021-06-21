@@ -71,6 +71,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
     private ArrayList<Toast> allToasts = new ArrayList<>();
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +172,7 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void onRackMinusClick() {
         if(getMaxRack() == 1) {
             Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_lastRack),
@@ -181,53 +183,73 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
         }
         int rack = getMaxRack();
         int maxshelf = getMaxShelfByRack(rack);
-        final Place[] p = {new Place()};
-        for (Integer[] it:shelves) {
-            if(it[0] == rack)
-                for(int i = 1; i<maxshelf+1; i++)
-                mainViewModel.getPlacesByBookcaseAndShelf(rack, i).observe(this, bookEntities -> {
-                if(bookEntities.size() > 0)
-                    for (PlaceEntity pl:bookEntities) {
-                        p[0] = pl.placeEntity;
+        List<Place> places = new ArrayList<>();
+        for (int i = 1; i < maxshelf + 1; i++)
+            mainViewModel.getPlacesByBookcaseAndShelf(rack, i).observe(this, bookEntities -> {
+                if (bookEntities.size() > 0)
+                    for (PlaceEntity pl : bookEntities) {
+                        places.add(pl.placeEntity);
                     }
-                });
-        }
-        new CountDownTimer(800, 1000) {
+            });
+        new CountDownTimer(500, 1000) {
             public void onTick(long millisUntilFinished) {
                 storageView.setVisibility(RecyclerView.INVISIBLE);
                 pb.setVisibility(ProgressBar.VISIBLE);
             }
             public void onFinish() {
-                if(p.length > 0){
-                    for (Place it:p)
+                if (places.size() != 0) {
+                    for (Place it : places)
                         Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(it));
-                }
-                new CountDownTimer(500, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                        //
-                    }
-                    @RequiresApi(api = Build.VERSION_CODES.N)
-                    public void onFinish() {
-                        shelves.removeIf(value -> value[0] == rack && value[1] == maxshelf);
-                        startTimer();
-                        if(getMaxRack() < selectedRack) {
-                            selectedRack=getMaxRack();
-                            selectedShelf = 1;
+                    new CountDownTimer(500, 1000) {
+                        public void onTick(long millisUntilFinished) {
                         }
-                        setNumberPickers();
-                        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_rackDeleted),
-                                Toast.LENGTH_LONG);
-                        allToasts.add(t);
-                        t.show();
-                        saveData();
-                        initData();
-                    }
-                }.start();
+
+                        @RequiresApi(api = Build.VERSION_CODES.N)
+                        public void onFinish() {
+                            storageView.setVisibility(RecyclerView.VISIBLE);
+                            pb.setVisibility(ProgressBar.INVISIBLE);
+                            shelves.removeIf(value -> value[0] == rack && value[1] == maxshelf);
+                            if (getMaxRack() < selectedRack) {
+                                selectedRack = getMaxRack();
+                                selectedShelf = 1;
+                            }
+                            setNumberPickers();
+                            Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_rackDeleted),
+                                    Toast.LENGTH_LONG);
+                            allToasts.add(t);
+                            t.show();
+                            saveData();
+                            initData();
+                        }
+                    }.start();
+                }
+                else {
+                    storageView.setVisibility(RecyclerView.VISIBLE);
+                    pb.setVisibility(ProgressBar.INVISIBLE);
+                    removeRack(rack, maxshelf);
+                }
             }
         }.start();
-
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void removeRack(int rack, int maxShelf){
+        for(int i = 1; i<maxShelf+1; i++) {
+            int finalI = i;
+            shelves.removeIf(value -> value[0] == rack && value[1] == finalI);
+        }
+        if (getMaxRack() < selectedRack) {
+            selectedRack = getMaxRack();
+            selectedShelf = 1;
+        }
+        setNumberPickers();
+        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_rackDeleted),
+                Toast.LENGTH_LONG);
+        allToasts.add(t);
+        t.show();
+        saveData();
+        initData();
+    }
 
     private void onShelfMinusClick() {
         if(getMaxShelfByRack(selectedRack) == 1) {
@@ -237,13 +259,12 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
             t.show();
             return;
         }
-        Integer rack = selectedRack;
-        Integer maxShelf = getMaxShelfByRack(rack);
-        final Place[] p = {new Place()};
-            mainViewModel.getPlacesByBookcaseAndShelf(rack, maxShelf).observe(this, bookEntities -> {
+        int maxShelf = getMaxShelfByRack(selectedRack);
+        List<Place> places = new ArrayList<>();
+            mainViewModel.getPlacesByBookcaseAndShelf(selectedRack, maxShelf).observe(this, bookEntities -> {
                 if (bookEntities.size() > 0)
                     for (PlaceEntity pl : bookEntities) {
-                        p[0] = pl.placeEntity;
+                        places.add(pl.placeEntity);
                     }
             });
         new CountDownTimer(500, 1000) {
@@ -252,36 +273,39 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
                 pb.setVisibility(ProgressBar.VISIBLE);
             }
             public void onFinish() {
-                Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(p[0]));
-                new CountDownTimer(500, 1000) {
-                    public void onTick(long millisUntilFinished) {
-                        //
-                    }
-                    public void onFinish() {
-                        int shelf = getMaxShelfByRack(rack)-1;
-                        for (Integer[] i:shelves) {
-                            if(i[0] == rack) i[1]=shelf;
-                        }
-                        if(getMaxShelfByRack(selectedRack) < selectedShelf) selectedShelf=getMaxShelfByRack(selectedRack);
-                        setNumberPickers();
-                        storageView.setVisibility(RecyclerView.VISIBLE);
-                        pb.setVisibility(ProgressBar.INVISIBLE);
-                        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_shelfDeleted),
-                                Toast.LENGTH_LONG);
-                        allToasts.add(t);
-                        t.show();
-                        saveData();
-                        initData();
-                    }
-                }.start();
+                if (places.size() != 0) {
+                    for (Place it : places)
+                        Executors.newSingleThreadExecutor().execute(() -> mainViewModel.deletePlace(it));
+
+                    new CountDownTimer(500, 1000) {
+                        public void onTick(long millisUntilFinished) { }
+                        public void onFinish() { removeShelf(); }
+                    }.start();
+                }
+                else removeShelf();
             }
         }.start();
-
     }
 
+    private void removeShelf(){
+        int shelf = getMaxShelfByRack(selectedRack) - 1;
+        for (Integer[] i : shelves) {
+            if (i[0] == selectedRack) i[1] = shelf;
+        }
+        if (getMaxShelfByRack(selectedRack) < selectedShelf)
+            selectedShelf = getMaxShelfByRack(selectedRack);
+        setNumberPickers();
+        storageView.setVisibility(RecyclerView.VISIBLE);
+        pb.setVisibility(ProgressBar.INVISIBLE);
+        Toast t = Toast.makeText(getApplicationContext(), getString(R.string.SA_shelfDeleted),
+                Toast.LENGTH_LONG);
+        allToasts.add(t);
+        t.show();
+        saveData();
+        initData();
+    }
 
     private void setNumberPickers(){
-
         rackNum.setMaxValue(getMaxRack());
         rackNum.setMinValue(1);
         rackNum.setValue(selectedRack);
@@ -340,17 +364,17 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
 
     private void getBookList(){
         mainViewModel.getPlacesByBookcaseAndShelf(selectedRack,selectedShelf).observe(this, placeEntities -> {
-                for(PlaceEntity plEnt: placeEntities) {
-                    if (plEnt != null) list.add(createItem(plEnt));
-                }
-                if(list.size() == 0) {
-                    NoStorageItem noItems = new NoStorageItem();
-                    noItems.setMessage(getString(R.string.SA_nobooks));
-                    list.add(noItems);
-                }
-                adapter.setDataList(list);
-                storageView.setAdapter(adapter);
-            });
+            for(PlaceEntity plEnt: placeEntities) {
+                if (plEnt != null) list.add(createItem(plEnt));
+            }
+            if(list.size() == 0) {
+                NoStorageItem noItems = new NoStorageItem();
+                noItems.setMessage(getString(R.string.SA_nobooks));
+                list.add(noItems);
+            }
+            adapter.setDataList(list);
+            storageView.setAdapter(adapter);
+        });
     }
 
     private StorageItem createItem(PlaceEntity data){
@@ -619,9 +643,6 @@ public class StorageActivity extends BaseActivity implements ReplaceDialog.OnCom
         String json = gson.toJson(shelves); // getting data from gson and storing it in a string.
         editor.putString("shelves", json); // below line is to save data in shared prefs in the form of string.
         editor.apply(); // below line is to apply changes and save data in shared prefs.
-
-        // after saving data we are displaying a toast message.
-        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
 
     private  void removeValue(String key) {
