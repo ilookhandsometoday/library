@@ -123,7 +123,6 @@ SHow();
         result.text = review;
         result.rating = ratingValue;
         result.timestamp = new Date();
-        result.id = findId(result.timestamp);
 
         BookEntity b = new BookEntity();
         b.id = bookId;
