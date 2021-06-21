@@ -52,10 +52,16 @@ public class DatabaseManager {
     private void initData(Context context) {
         List<BookEntity> books = new ArrayList<>();
         BookEntity book = new BookEntity();
-        book.author = "Григорович Сергей";
-        book.rating = (double)10;
-        book.title = "Вот ты говоришь, а я ВИЖУ";
+        book.author = "Братья Стругацкие";
+        book.rating = (double)5;
+        book.title = "Пикник на обочине";
         book.id = 1;
+        books.add(book);
+        book = new BookEntity();
+        book.author = "Сапковский Анджей";
+        book.rating = (double)5;
+        book.title = "Ведьмак";
+        book.id = 2;
         books.add(book);
         DatabaseManager.getInstance(context).getLibDao().insertBooks(books);
 
@@ -63,10 +69,33 @@ public class DatabaseManager {
         Review review = new Review();
         review.id = 1;
         review.bookID = 1;
-        review.text = "Ваще зашибос!";
+        review.text = "Легендарно!";
         review.rating = 5;
         review.timestamp = dateFromString("2021-06-20 21:00");
         reviews.add(review);
+        review = new Review();
+        review.id = 2;
+        review.bookID = 1;
+        review.text = "Начало эпохи!";
+        review.rating = 5;
+        review.timestamp = dateFromString("2021-06-20 23:00");
+        reviews.add(review);
+
+        review = new Review();
+        review.id = 3;
+        review.bookID = 2;
+        review.text = "Лучшее произведение человечества!";
+        review.rating = 5;
+        review.timestamp = dateFromString("2021-06-20 20:00");
+        reviews.add(review);
+        review = new Review();
+        review.id = 4;
+        review.bookID = 2;
+        review.text = "Это шедевр!";
+        review.rating = 5;
+        review.timestamp = dateFromString("2021-06-13 23:00");
+        reviews.add(review);
+
         DatabaseManager.getInstance(context).getLibDao().insertReviews(reviews);
     }
 }
